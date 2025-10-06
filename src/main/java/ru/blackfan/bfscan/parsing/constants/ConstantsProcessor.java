@@ -47,7 +47,7 @@ public class ConstantsProcessor {
     private final PrintWriter writerSearch;
     private static final double ENTROPY_THRESHOLD = 4.1;
     private static final double ENTROPY_THRESHOLD_MIN = 3.9;
-    private static final List<String> SECRET_KEYWORDS = Arrays.asList("api", "secret", "token", "auth", "pass", "pwd", "hash", "salt", "crypt", "cert", "sign", "credential");
+    private static final List<String> SECRET_KEYWORDS = Arrays.asList("api", "secret", "token", "auth", "pass", "password", "pwd", "hash", "salt", "crypt", "cert", "sign", "credential");
     private static final Pattern INVALID_CONTROL_CHARS_PATTERN = Pattern.compile("[\\x01-\\x08\\x0B\\x0C\\x0E-\\x1F]", Pattern.DOTALL);
     private static final Pattern URL_PATTERN = Pattern.compile("(\\bhttps?)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]*[-A-Za-z0-9+&@#/%=~_|]");
     private static final Pattern QUOTE_PATTERN = Pattern.compile("['\"`](.*?)['\"`]");
@@ -304,6 +304,9 @@ public class ConstantsProcessor {
         for (String secretKeyword : SECRET_KEYWORDS) {
             if (lower.contains(secretKeyword) && calculateEntropy(value) >= ENTROPY_THRESHOLD_MIN && !isLikelyText(value)) {
                 return "field name contains " + secretKeyword;
+            }
+            if (lower.equals(secretKeyword) || lower.endsWith(secretKeyword)) {
+                return "field name equal " + secretKeyword;
             }
         }
         if (isHexLike(value)) {

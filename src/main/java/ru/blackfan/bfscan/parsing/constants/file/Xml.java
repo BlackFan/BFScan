@@ -45,6 +45,10 @@ public class Xml {
             Node attr = attributes.item(i);
             keyValuePairs.add(new KeyValuePair(nodeName + "@" + attr.getNodeName(), attr.getNodeValue()));
         }
+        
+        if(attributes.getNamedItem("name") != null && attributes.getNamedItem("value") != null) {
+            keyValuePairs.add(new KeyValuePair(nodeName + "@" + attributes.getNamedItem("name").getNodeValue(), attributes.getNamedItem("value").getNodeValue()));
+        }
 
         NodeList children = element.getChildNodes();
         for (int i = 0; i < children.getLength(); i++) {
